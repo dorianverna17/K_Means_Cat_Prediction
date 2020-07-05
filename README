@@ -1,0 +1,207 @@
+Verna Dorian-Alexandru
+314CC
+
+Task 1:
+
+In folderul de la task-ul 1 am 5 functii:
+1) generate_probabilities_system.m
+2) matrix_to_csr.m
+3) Jacobi_factorization.m
+4) Jacobi_sparse.m
+5) csr_multiplication.m
+
+-Prima functie m-am gandit ca as vrea sa o fac astfel
+incat sa aiba timpul de executie mic asa ca am incercat
+sa nu fac atatea iteratii. Acesta este motivul pentru
+care aceasta poate sa bata la ochi in momentul in care
+te uiti pe ea. Nu stiu exact cat de eficienta este din
+punct de vedere al timpului, dar eu sper ca este ok.
+Am incercat sa iau elementele din colturile labirintului,
+sa completez liniile matricei sistemului corespunzatoare
+lor, iar apoi sa fac acelasi lucru pentru elementele de
+pe margini si apoi din interior
+
+-La a doua functie iterat prin toate elementele matricei
+si am verificat pentru fiecare daca este diferit de 0, caz
+care completam vectorii values, colind, iar mai apoi rowptr.
+La rowptr m-am folosit de o variabila ok ca sa spun daca
+linia contine elemente diferite de zero
+
+-La functia 3 am folosit informatii pe care le stiam de
+la laborator. Am calculat matricele D, L, U (diagonala,
+inferior triunghiulara si superior triunghiulara), matrice
+pe care le-am folosit ulterior ca sa calculez matricele N
+si P de care m-am folosit pentru a calcula matricea de
+iteratie G_j si vectorul de iteratie c_j. Am folosit
+formulele de la laborator si de la explicatile pentru
+laboratoare.
+
+-La functia 4 am folosit un while cu maxim 900 de iteratii.
+Am ales 900 de iteratii pentru ca am ales pe rand valori si
+am observat ca pentru un numar cat mai mare de iteratii
+imi va trece mai multe teste. M-am oprit la 900, deoarece
+este ultima valoare pe care am testat-o si pentru care nu
+imi dadea timeout si imi trecea toate testele. Am si o conditie
+de oprire cu break in while, conditia fiind ca cea pe care am
+pus-o la laborator. Am folosit ideile de la laborator si de la
+curs, conditia de oprire folosita este similara cu cea pe care
+eu am folosit-o la laborator.
+
+-Functia 5 a fost data deja. 
+
+Task-ul 1 a fost ok, prima functie a fost mai muncitoreasca
+daca e sa zic asa. Nu a fost ceva care sa puna probleme mari
+si nici nu a durat foarte mult pentru a fi facut.
+Am intampinat mici probleme la Jacobi sparse, acolo ma
+surprindeau valorile pe care le obtineam, dar am descoperit ca
+testele mergeau pentru un numar mai mare de iteratii.
+
+Task 2:
+
+In folderul pentru task-ul 2 am 2 functii:
+1) clustering_pc.m
+2) compute_cost.m
+
+-La prima functie initializez o lista de clustere, fiecare
+cluster fiind ca un vector in trei dimensiuni, deoarece lista
+era ca o matrice de vectori, unde fiecare element din vector
+reprezenta un punct de D dimensiuni. Puneam valorile in cluster,
+iar apoi calculam centroizii. Fiecare cluster trebuia initializat
+cu 1 (aici mi-a luat ceva pana sa ma prind) - adica sa ii pun
+dimensiunea minima daca nu avea niciun element corespunzator (dar
+acesta a fost doar un caz care trebuia luat in considerare). Apoi
+am luat o bucla while in care aveam doi vectori centroids, fiecare
+corespunzand dupa indice clusterului lui. Vectorul centroids
+reprezenta centroizii de la pasul anterior, iar centroids2 pe cei
+de la pasul curent. In momentul in care centroids va fi egal cu
+centroids2, atunci se iese din while, iar aceia vor fi centroizii.
+Am folosit functia norm() pentru a calcula distanta euclidiana de
+puncte la centroizi.
+
+-La a doua functie caut distanta minima de la punct la centroidul
+la care acesta este si le adun. Fac acest lucru intr-un for, unde
+calculez un vector de distante euclidiene de la un anumit punct 
+(punctul i) la fiecare centroid. Gasesc minimul acestui vector si
+vad care centroid corespunde acestei distante, apoi o adun la
+variabila cost.
+
+Task-ul 2 a fost ok, mi-a luat ceva sa ma prind cum sa modific
+centroizii la prima functie. Ca dificultate, task 2 a fost mai
+greu decat task 1, dar si acesta a fost ok.
+
+Task 3:
+
+In folderul pentru task-ul 3 am 8 functii:
+1) rgbHistogram.m
+2) hsvHistogram.m
+3) hsv_func_helper.m
+4) Householder.m
+5) SST.m
+6) preprocess.m
+7) learn.m
+8) evaluate.m
+
+-Functia rgbHistogram implica formarea vectorului sol, folosind
+matricele a1, a2 si a3, fiecare corespunzand culoriilor R, G si B.
+a1, a2 si a3 sunt calculate cu histc. Folosesc un for pentru a
+forma sol. La inceput mai citesc si imaginea respectiva, iar
+img(:, :, 1) reprezinta matricea pentru pixelii de la culoarea rosie,
+img(:, :, 2) pentru verde, iar img(:, :, 3) pentru albastru.
+Intervalele cu valorile pixelilor le aleg intre 0 si 255, in functie
+de count_bins, cu functia linspace.
+
+-Functia hsvHistogram face acelasi lucru ca rgb, numai ca in loc
+de img(:,:,:), am matricele H, S si V. Aceasta mai apeleaza si
+functia hsv_func_helper. Intervalele cu valorile pixelilor le aleg
+intre 0 si 1.01, in functie de count_bins, cu functia linspace.
+
+-Functia hsv_func_helper am facut-o cu vectorizari, citesc prima
+oara imaginea, apoi formez cu histc matricele corespunzatoare
+fiecarei culori R, G, B, apoi formez R1, G1, B1. Am aplicat in general
+algoritmul dat in pdf. Calculez Cmax si Cmin si delta, apoi calculez
+calculez fiecare element din H in functie de conditiile date:
+Cmax == R1, Cmax == G1, Cmax == B1. Normez H, iar mai apoi calculez S si V;
+Am incercat sa folosesc vectorizari, deoarece am inteles,
+ca reduce timpul.
+
+-La functia Householder am intrebat initial pe forum daca e ok sa folosim
+algoritmul postat pe moodle, intrebare la care mi s-a spus ca ma pot
+inspira din el, dar teoretic eu ar trebui sa il implementez. Am incercat
+prima oara sa o fac folosind algoritmul de la laborator, dar acesta avea
+o problema cu aproximarile si obtineam niste erori care imi stricau tot
+rezultatul sistemului (am incercat sa calculez reflectorul Householder,
+apoi sa inmultesc A cu acest reflector). Am incercat sa folosesc atunci
+ideea de a forma matricea R dupa cum ar trebui sa arate elementele lui A
+dupa ce ii este aplicat reflectorul Householder. Aceasta idee este folosita
+si in cadrul algoritmului de pe acs curs. De acolo am preluat ideea de
+a-l folosi pe beta, in calcularea coloanelor lui A si Q din cadrul for-ului.
+Codul este in principiu similar celui de pe acs curs dar am incercat pe
+cat posibil il scriu eu.
+
+
+-SST este in principal algoritmul pe care l-am folosit la laborator,
+dar l-am modificat astfel incat sa fie valabil pentru o matrice care
+sa nu fie patratica.
+
+-Functia preprocess sugerez sa fie privita ca fiind formata din doua
+parti. Prima este cea in care adaugam linii in matricea de
+caracteristici, linii care sunt vectorii sol care reprezinta
+histogramele fiecarei poze cu pisica. Cu alte cuvinte, citesc fiecare
+poza din folderul cats, apoi formez histograma, pe care o introduc
+in matricea X. A doua parte a functiei consta in adaugarea pe
+liniile urmatoare lui X a histogramelor pozelor care nu au pisici.
+De asemenea, in prima parte fac si vectorul de etichete, pe care il
+initializez cu 1, apoi cand trec la pozele fara pisici, transform
+componentele vectorului y aferente in -1.
+
+-Functia de learn imi apeleza functiile Householder si SST pentru a
+rezolva sistemul X tilda ori w egal cu y. In acesta functie, la inceput,
+am format si X tilda, adaugand o coloana de 1 la matricea X.
+
+-Functia evaluate imi intra prima oara in folderul cats, verifica
+pentru fiecare poza daca scalarul y1 este mai mare decat 0, caz in care
+poza a fost clasificata bine si maresc numarul de poze clasificate bine.
+Apoi intru in folderul not_cats si verific fiecare poza. Daca pentru
+aceasta y1 este mai mic decat zero, atunci poza a fost clasificata bine,
+si maresc numarul nr. La final calculez procentajul.
+
+Acest task mie mi s-a parut cel mai greu de implementat. Mi-a luat cateva
+zile sa imi dau seama de greselile pe care le aveam. Initial nu stiam ca
+matricea X trebuie sa contina si histogramele pozelor din not_cats.
+Am mai avut o problema la SST de care mi-a luat o zi sa imi dau seama.
+
+Task 4: 
+
+In folderul pentru task-ul 4 am 6 functii:
+1) rgbHistogram.m
+2) hsvHistogram.m
+3) hsv_func_helper.m
+4) preprocess.m
+5) learn.m
+6) evaluate.m
+
+-Primele 4 functii sunt aceleasi ca la task-ul 3
+
+-La functia 5 am implementat in principiu algoritmul dat in pdf.
+Valorile initiale pentru w le fac cu functia randperm. Linile din matricea
+X pe care le folosesc in for le aleg random tot cu aceasta functie.
+De asemenea, inainte de structura repetitiva cu epochs, scalez X si apoi
+calculez X tilda (adaug coloana de 1).
+
+-Functia 6 seamana foarte mult cu functia de la task 6, cu deosebirea ca
+pe masura ce citesc o poza, iau histograma acesteia si formez matricea X cu ea.
+Citesc si pozele din cats si din not_cats, apoi scalez matricea X, formez X
+tilda, dupa care iau fiecare linie din ea si fac verificarea de la
+task-ul 3. Aceasta verificare o fac intr-o bucla de la finalul functiei.
+
+Task-ul 4 a fost mai usor odata ce am rezolvat task-ul 3. Probabil ca cele
+doua erau cam la fel ca dificultate. Am avut in principal avantajul ca am avut
+forumul la dispozitie si am mai vazut ce au intrebat unii colegi. De exemplu,
+am descoperit dupa ca trebuia sa scalez X si in evaluate.
+
+Tema nu a fost usoara, a fost chiar o tema greuta. Desi am stat multe ore pe
+ea, consider ca am invatat unele lucruri interesante despre machine learning
+si sper ca poate o sa le aplic in viitor. In rest, sper ca tema sa fie ok.
+
+Verna Dorian-Alexandru
+314CC
